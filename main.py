@@ -10,7 +10,7 @@ BUCKET_NAME = 'pitagoras-test'  # Cambia esto por el nombre de tu bucket
 
 @app.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Hola Mundo"}
 
 
 @app.post("/upload-csv")
