@@ -1,6 +1,8 @@
 import boto3
 from fastapi import FastAPI, File, UploadFile
+from fastapi.responses import FileResponse
 from io import BytesIO
+import os
 from app.generate_pptx_from_csv import generate_pptx_from_csv
 from app.s3_utils import generate_presigned_url
 
@@ -12,7 +14,14 @@ BUCKET_NAME = 'pitagoras-test'  # Cambia esto por el nombre de tu bucket
 
 @app.get("/")
 async def root():
-    return {"message": "Hola Mundo"}
+    file_path = os.path.join("public", "mapa_sismos.html")
+    return FileResponse(file_path, media_type="text/html")
+
+
+@app.get("/my-plot")
+async def show_plot():
+    file_path = os.path.join("public", "my_plot.html")
+    return FileResponse(file_path, media_type="text/html")
 
 
 @app.post("/upload-csv")
