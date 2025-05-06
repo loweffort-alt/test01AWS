@@ -30,7 +30,7 @@ async def upload_csv(file: UploadFile = File(...)):
         return {"status": "error", "message": str(e)}
 
 
-@app.post("/generate-pptx")
+@app.get("/generate-pptx")
 async def generate_pptx():
     try:
         key = generate_pptx_from_csv()
