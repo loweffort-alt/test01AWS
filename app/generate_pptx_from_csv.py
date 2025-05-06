@@ -1,0 +1,55 @@
+import os
+from canvas import crear_canvas
+from csv_reader import leer_csv
+from generate_pptx import crear_pptx
+import matplotlib.pyplot as plt
+import numpy as np
+
+
+def generate_pptx_from_csv(
+        path_csv="../triangles.csv",
+        img_dir="./images",
+        name_pptx="triangles.pptx"
+):
+    # Leer los datos del CSV
+    df = leer_csv('triangles.csv')
+
+    # Directorio donde guardar las imágenes
+    img_dir = './images'  # Cambia este directorio si es necesario
+    os.makedirs(img_dir, exist_ok=True)
+
+    # Generar y guardar los gráficos
+    for index, row in df.iterrows():
+        fig, ax = crear_canvas()
+
+        # Crear puntos
+        A = (row['Ax'], row['Ay'])
+        B = (row['Bx'], row['By'])
+        C = (row['Cx'], row['Cy'])
+
+        triangle = [A, B, C, A]
+        triangle_np = np.array(triangle)
+
+        # Dibujar triángulo
+        ax.plot(triangle_np[:, 0], triangle_np[:, 1], 'bo-')
+
+        # Etiquetas
+        plt.text(*A, f'A{A}', fontsize=12, ha='right')
+        plt.text(*B, f'B{B}', fontsize=12, ha='left')
+        plt.text(*C, f'C{C}', fontsize=12, ha='right')
+
+        # Título y guardado
+        plt.title(f'Triángulo {row["triangulo"]}')
+        img_name = f'triangulo_{row["triangulo"]}.png'
+        img_path = os.path.join(img_dir, img_name)
+        plt.savefig(img_path)
+        plt.close()
+
+    # Crear la presentación PowerPoint con las imágenes generadas
+    images = [f for f in os.listdir(img_dir) if f.endswith('.png')]
+    crear_pptx(images, img_dir, 'triangulos.pptx')
+
+    print("¡Presentación generada con éxito!")
+
+
+generate_pptx_from_csv()
