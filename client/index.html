@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Test01 AWS</title>
+    <link href="css/style.css" rel="stylesheet">
+  </head>
+  <body>
+    <header>
+      <h1>Test01 AWS</h1>
+    </header>
+    <main>
+      <section>
+        <h2>Welcome to Test01 AWS</h2>
+        <p>This website convert .csv to .pptx with certains parameters</p>
+        <p>The file must be called triangles.csv and must have the following format:</p>
+        <table>
+          <thead>
+            <tr>
+              <th>triangulo</th>
+              <th>Ax</th>
+              <th>Ay</th>
+              <th>Bx</th>
+              <th>By</th>
+              <th>Cx</th>
+              <th>Cy</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>T1</td>
+              <td>0</td>
+              <td>0</td>
+              <td>3</td>
+              <td>0</td>
+              <td>0</td>
+              <td>4</td>
+            </tr>
+            <tr>
+              <td>T2</td>
+              <td>0</td>
+              <td>0</td>
+              <td>5</td>
+              <td>0</td>
+              <td>0</td>
+              <td>9</td>
+            </tr>
+            <tr>
+              <td>T3</td>
+              <td>0</td>
+              <td>0</td>
+              <td>6</td>
+              <td>0</td>
+              <td>0</td>
+              <td>8</td>
+            </tr>
+            <tr>
+              <td>T4</td>
+              <td>0</td>
+              <td>0</td>
+              <td>8</td>
+              <td>0</td>
+              <td>0</td>
+              <td>6</td>
+            </tr>
+            <tr>
+              <td>T5</td>
+              <td>0</td>
+              <td>0</td>
+              <td>9</td>
+              <td>0</td>
+              <td>0</td>
+              <td>10</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>Upload your .csv file below:</p>
+        <form id="csvForm">
+          <input type="file" name="file" accept=".csv" required>
+          <input type="submit" value="Upload">
+        </form>
+        <div id="result" style="margin-top: 20px;"></div>
+      </section>
+    </main>
+    <footer>
+      <p>&copy; 2025 Gaaa Corp. All rights reserved.</p>
+    </footer>
+
+    <script>
+      const form = document.getElementById("csvForm");
+      const resultDiv = document.getElementById("result");
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        resultDiv.innerHTML = "Uploading...";
+
+        try {
+          // Enviar el CSV al backend
+          const uploadRes = await fetch("/upload-csv", {
+            method: "POST",
+            body: formData,
+          });
+
+          const uploadData = await uploadRes.json();
+
+          if (uploadData.status === "success") {
+            // Pedir la URL de descarga del pptx
+            const urlRes = await fetch("/generate-pptx");
+            const urlData = await urlRes.json();
+
+            resultDiv.innerHTML = `
+              <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFyvrED33XxoRY4THieqMBQSOxlSz7ygkPtg&s" alt="Generated Image" style="max-width: 100%; height: auto;">
+              <p><strong>Upload complete!</strong></p>
+              <a href="${urlData.download_url}" target="_blank">Download .pptx</a>
+            `;
+          } else {
+            resultDiv.innerHTML = `<p>Error: ${uploadData.message}</p>`;
+          }
+        } catch (error) {
+          resultDiv.innerHTML = `<p>Unexpected error: ${error}</p>`;
+        }
+      });
+    </script>
+  </body>
+</html>

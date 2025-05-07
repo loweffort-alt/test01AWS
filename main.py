@@ -18,6 +18,12 @@ async def root():
     return FileResponse(file_path, media_type="text/html")
 
 
+@app.get("/client")
+async def client_index():
+    file_path = os.path.join("client", "index.html")
+    return FileResponse(file_path, media_type="text/html")
+
+
 @app.get("/my-plot")
 async def show_plot():
     file_path = os.path.join("public", "my_plot.html")
