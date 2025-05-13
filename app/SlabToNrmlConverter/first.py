@@ -238,10 +238,6 @@ def SlabToNrmlConverter(fuente: str, upper: int, bottom: int):
 # Crear polígono final ordenado antihorario
     nueva_fuente = Polygon(coords_fuente)
 
-#########################################################
-#########################################################
-#########################################################
-#########################################################
 # 3.3 corta la fuente extendida con el slab y grafíca
 
     polygon_fuente = nueva_fuente

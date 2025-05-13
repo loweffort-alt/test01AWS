@@ -3,7 +3,7 @@ from pptx.util import Inches
 import os
 
 
-def crear_pptx(images, img_dir, name_pptx='triangles.pptx'):
+def crear_pptx(images, img_dir, pptx_path):
     """
     Crea una presentación de PowerPoint con las imágenes proporcionadas.
 
@@ -18,10 +18,11 @@ def crear_pptx(images, img_dir, name_pptx='triangles.pptx'):
     for image in images:
         slide = ppt.slides.add_slide(ppt.slide_layouts[5])  # Layout en blanco
 
-        # Ruta completa de la imagen
+        # Ubica la imagen
         img_path = os.path.join(img_dir, image)
+        # Inserta la imagen en el slide
         slide.shapes.add_picture(
             img_path, Inches(1), Inches(1), width=Inches(8))
 
     # Guardar la presentación
-    ppt.save(name_pptx)
+    ppt.save(pptx_path)

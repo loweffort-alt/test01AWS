@@ -2,16 +2,15 @@
 import boto3
 # fastapi
 from fastapi import FastAPI, File, UploadFile, Form
-from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 # python
 from io import BytesIO
 import os
-from uuid import uuid4
 # local
-from app.generate_pptx.generate_pptx_from_csv import generate_pptx_from_csv
-from app.generate_pptx.s3_utils import generate_presigned_url
+from app.generate_pptx.main import generate_pptx_from_csv
+from app.aws.s3_utils import generate_presigned_url
 from app.SlabToNrmlConverter.first import SlabToNrmlConverter
 
 app = FastAPI()
