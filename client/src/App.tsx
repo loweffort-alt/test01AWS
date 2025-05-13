@@ -13,6 +13,9 @@ function App() {
   const [bottom, setBottom] = useState(0)
   const [preview, setPreview] = useState("")
 
+  const productionURL = "http://3.141.200.20:8000/generate-seismic-fonts"
+  // const localURL = "http://localhost:8000/generate-seismic-fonts"
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     // Aquí puedes manejar el envío del formulario
@@ -22,7 +25,7 @@ function App() {
       formData.append('upper', upper.toString())
       formData.append('bottom', bottom.toString())
 
-      const response = await fetch(`http://localhost:8000/generate-seismic-fonts`, {
+      const response = await fetch(productionURL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
