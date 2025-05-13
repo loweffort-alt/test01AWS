@@ -385,7 +385,9 @@ def SlabToNrmlConverter(fuente: str, upper: int, bottom: int):
 
     html_name = uuid4().hex
     fig.write_html(f"public/htmls-generados/{html_name}.html")
-    return {"url": f"http://localhost:8000/public/htmls-generados/{html_name}.html"}
+    production_root_url = "http://3.141.200.20:8000"
+    # dev_root_url = "http://localhost:8000"
+    return {"url": f"{production_root_url}/public/htmls-generados/{html_name}.html"}
 
 # -----------------------------------
 # Mostrar estructura `data`
