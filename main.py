@@ -3,8 +3,9 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import FileResponse
 from io import BytesIO
 import os
-from app.generate_pptx_from_csv import generate_pptx_from_csv
-from app.s3_utils import generate_presigned_url
+from app.generate_pptx.generate_pptx_from_csv import generate_pptx_from_csv
+from app.generate_pptx.s3_utils import generate_presigned_url
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
@@ -12,15 +13,26 @@ s3_client = boto3.client('s3')
 BUCKET_NAME = 'pitagoras-test'  # Cambia esto por el nombre de tu bucket
 
 
+app.mount("/assets",
+          StaticFiles(directory="client/dist/assets"),
+          name="assets")
+
+
 @app.get("/")
 async def root():
-    file_path = os.path.join("public", "mapa_sismos.html")
+    file_path = os.path.join("client", "dist", "index.html")
     return FileResponse(file_path, media_type="text/html")
 
 
-@app.get("/client")
+# @app.get("/slab-to-nrml")
+# async def slab_to_nrml():
+#     file_path = os.path.join("public", "mapa_sismos.html")
+#     return FileResponse(file_path, media_type="text/html")
+
+
+@app.get("/mapas_sismos")
 async def client_index():
-    file_path = os.path.join("client", "index.html")
+    file_path = os.path.join("public", "mapa_sismos.html")
     return FileResponse(file_path, media_type="text/html")
 
 

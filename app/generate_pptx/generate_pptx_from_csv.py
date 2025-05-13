@@ -1,8 +1,8 @@
 import os
 import boto3
-from app.canvas import crear_canvas
-from app.csv_reader import leer_csv
-from app.generate_pptx import crear_pptx
+from app.generate_pptx.canvas import crear_canvas
+from app.generate_pptx.csv_reader import leer_csv
+from app.generate_pptx.generate_pptx import crear_pptx
 import matplotlib.pyplot as plt
 import numpy as np
 from io import StringIO
