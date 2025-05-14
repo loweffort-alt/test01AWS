@@ -1,5 +1,3 @@
-# aws
-import boto3
 # fastapi
 from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.responses import FileResponse
