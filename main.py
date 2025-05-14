@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # python
 from io import BytesIO
 import os
+from uuid import uuid4
 # local
 from app.generate_pptx.main import generate_pptx_from_csv
 from app.aws.s3_utils import generate_presigned_url
@@ -26,10 +27,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-s3_client = boto3.client('s3')
-BUCKET_NAME = 'pitagoras-test'  # Cambia esto por el nombre de tu bucket
-
 
 app.mount("/public", StaticFiles(directory="public"), name="public")
 
@@ -65,29 +62,20 @@ async def show_plot():
     return FileResponse(file_path, media_type="text/html")
 
 
-@app.post("/upload-csv")
-async def upload_csv(file: UploadFile = File(...)):
+@app.post("/csv-to-pptx")
+async def csv_to_pptx(file: UploadFile = File(...)):
     content = await file.read()
-
     file_stream = BytesIO(content)
+    img_dir = "./images"
+    name_pptx = f"triangles_{uuid4()}.pptx"
 
     try:
-        s3_client.upload_fileobj(file_stream, BUCKET_NAME, file.filename)
-        return {"status": "success",
-                "filename": file.filename,
-                "size": len(content)}
-    except Exception as e:
-        return {"status": "error", "message": str(e)}
-
-
-@app.get("/generate-pptx")
-async def generate_pptx():
-    try:
-        key = generate_pptx_from_csv()
-        url = generate_presigned_url(key, BUCKET_NAME)
+        key = generate_pptx_from_csv(file_stream, img_dir, name_pptx)
+        url = generate_presigned_url(key)
         return {
             "status": "success",
             "message": "PPTX generado con éxito",
+            "pptx_name": name_pptx,
             "download_url": url
         }
     except Exception as e:

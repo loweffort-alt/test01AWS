@@ -7,7 +7,7 @@ import os
 
 def csv_to_png(file_obj, img_dir):
     # Leer el archivo CSV
-    df = pd.read_csv(file_obj)
+    df = pd.read_csv(file_obj, encoding='utf-8')
 
     # Directorio donde guardar las imágenes
     os.makedirs(img_dir, exist_ok=True)

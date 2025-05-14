@@ -1,22 +1,18 @@
 import os
 from app.generate_pptx.csv_to_png import csv_to_png
 from app.generate_pptx.generate_pptx import crear_pptx
-from app.aws.s3_utils import download_csv_from_s3, upload_pptx_to_s3
+from app.aws.s3_utils import upload_pptx_to_s3
 
 
 def generate_pptx_from_csv(
-        img_dir="./images",
-        name_pptx="triangles.pptx"
+        csv_file,
+        img_dir,
+        name_pptx
 ):
     """
     CSV a PNG a PPTX por cada línea del CSV.
     """
-    # Descargar el CSV de S3
-    s3_key = "triangles.csv"
-    csv_file = download_csv_from_s3(s3_key)
-
     # Genera las imágenes en un archivo ./images
-    img_dir = './images'
     csv_to_png(csv_file, img_dir)
 
     # Crear la presentación PowerPoint con las imágenes generadas

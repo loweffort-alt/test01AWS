@@ -7,7 +7,7 @@ BUCKET_NAME = 'pitagoras-test'  # Cambia esto por el nombre de tu bucket
 
 
 def generate_presigned_url(key: str,
-                           bucket: str,
+                           bucket: str = BUCKET_NAME,
                            expiration: int = 3600) -> str:
     """
     Generates a presigned URL to download a file from S3.
