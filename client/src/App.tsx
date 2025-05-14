@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { devMode, apiUrl, productionUrl } from '../config.ts'
 
 const fuentes = ["interfase | F-3a", "interfase | F-4a", "interfase | F-5a.1",
   "intraplaca | F-3b", "intraplaca | F-3c", "intraplaca | F-4b",
@@ -7,23 +8,21 @@ const fuentes = ["interfase | F-3a", "interfase | F-4a", "interfase | F-5a.1",
   "corteza | PSw-3", "corteza | PSw-4", "corteza | PSe-3", "corteza | PSe-5",
   "corteza | PSw-5", "corteza | PSe-4", "corteza | PSe-6"]
 
-const devMode = import.meta.env.MODE
 let url = ""
 
 function App() {
   const [fuente, setFuente] = useState(fuentes[0])
-  const [upper, setUpper] = useState(0)
-  const [bottom, setBottom] = useState(0)
+  const [upper, setUpper] = useState(5)
+  const [bottom, setBottom] = useState(80)
   const [preview, setPreview] = useState("")
 
   if (devMode == "development") {
-    url = `${import.meta.env.VITE_LOCAL_URL}/generate-seismic-fonts`
-  } if (devMode == "production") {
-    url = `${import.meta.env.VITE_PRODUCTION_URL}/generate-seismic-fonts`
+    url = `${apiUrl}/generate-seismic-fonts`
+  } else if (devMode == "production") {
+    url = `${productionUrl}/generate-seismic-fonts`
   } else {
-    return new Error("Invalid environment mode")
+    return <div>Error: No config found</div>
   }
-
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

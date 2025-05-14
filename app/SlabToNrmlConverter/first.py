@@ -78,7 +78,7 @@ def SelectPolygon(fuente):
     return polygon_fuente_orig
 
 
-def SlabToNrmlConverter(fuente: str, upper: int, bottom: int):
+def SlabToNrmlConverter(path_dir: str, fuente: str, upper: int, bottom: int):
     """
     Convierte un shapefile de slab a un formato normalizado.
     """
@@ -380,10 +380,15 @@ def SlabToNrmlConverter(fuente: str, upper: int, bottom: int):
     )
 
     html_name = uuid4().hex
-    fig.write_html(f"public/htmls-generados/{html_name}.html")
-    production_root_url = "http://3.141.200.20:8000"
-    # dev_root_url = "http://localhost:8000"
-    return {"url": f"{production_root_url}/public/htmls-generados/{html_name}.html"}
+
+    html_output = os.path.join(project_root,
+                               "public",
+                               "htmls-generados",
+                               f"{html_name}.html")
+    # fig.write_html(f"public/htmls-generados/{html_name}.html")
+    fig.write_html(html_output)
+
+    return {"url": f"{path_dir}/public/htmls-generados/{html_name}.html"}
 
 # -----------------------------------
 # Mostrar estructura `data`

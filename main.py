@@ -8,10 +8,19 @@ from io import BytesIO
 import os
 from uuid import uuid4
 # app
+from config import settings
 from app.generate_pptx.main import generate_pptx_from_csv
 from app.aws.s3_utils import generate_presigned_url
 from app.SlabToNrmlConverter.first import SlabToNrmlConverter
 
+
+APP_MODE = settings.APP_MODE
+if APP_MODE == "production":
+    path_dir = settings.PRODUCTION_URL
+elif APP_MODE == "development":
+    path_dir = settings.LOCAL_URL
+else:
+    raise ValueError("Invalid APP_MODE. Choose 'production' or 'development'.")
 
 app = FastAPI()
 # origins = [
@@ -45,7 +54,10 @@ async def generate_seismic_fonts(fuente: str = Form(...),
                                  upper: int = Form(...),
                                  bottom: int = Form(...)
                                  ):
-    res = SlabToNrmlConverter(fuente, upper, bottom)
+    res = SlabToNrmlConverter(path_dir,
+                              fuente,
+                              upper,
+                              bottom)
     return res
 
 
