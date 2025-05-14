@@ -1,20 +1,29 @@
 import { useState } from 'react'
 
-function App() {
-  const fuentes = ["interfase | F-3a", "interfase | F-4a", "interfase | F-5a.1",
-    "intraplaca | F-3b", "intraplaca | F-3c", "intraplaca | F-4b",
-    "intraplaca | F-4c.1", "intraplaca | F-4c.2", "intraplaca | F-5b.1",
-    "intraplaca | F-5c.1",
-    "corteza | PSw-3", "corteza | PSw-4", "corteza | PSe-3", "corteza | PSe-5",
-    "corteza | PSw-5", "corteza | PSe-4", "corteza | PSe-6"]
+const fuentes = ["interfase | F-3a", "interfase | F-4a", "interfase | F-5a.1",
+  "intraplaca | F-3b", "intraplaca | F-3c", "intraplaca | F-4b",
+  "intraplaca | F-4c.1", "intraplaca | F-4c.2", "intraplaca | F-5b.1",
+  "intraplaca | F-5c.1",
+  "corteza | PSw-3", "corteza | PSw-4", "corteza | PSe-3", "corteza | PSe-5",
+  "corteza | PSw-5", "corteza | PSe-4", "corteza | PSe-6"]
 
+const devMode = import.meta.env.MODE
+let url = ""
+
+function App() {
   const [fuente, setFuente] = useState(fuentes[0])
   const [upper, setUpper] = useState(0)
   const [bottom, setBottom] = useState(0)
   const [preview, setPreview] = useState("")
 
-  const productionURL = "http://3.141.200.20:8000/generate-seismic-fonts"
-  // const localURL = "http://localhost:8000/generate-seismic-fonts"
+  if (devMode == "development") {
+    url = `${import.meta.env.VITE_LOCAL_URL}/generate-seismic-fonts`
+  } if (devMode == "production") {
+    url = `${import.meta.env.VITE_PRODUCTION_URL}/generate-seismic-fonts`
+  } else {
+    return new Error("Invalid environment mode")
+  }
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -25,7 +34,7 @@ function App() {
       formData.append('upper', upper.toString())
       formData.append('bottom', bottom.toString())
 
-      const response = await fetch(productionURL, {
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
